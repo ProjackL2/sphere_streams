@@ -1,0 +1,62 @@
+{% extends 'basic/base.html' %}
+
+{% block title %}Server Streams{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/src/component/plugins/sphere_streams/tpl/css/stream.css">
+
+<div class="content">
+
+<div class="row text-center">
+    {% for i,streamer in streamers_info %}
+    <div class="col-md-4 col-xl-3 d-flex flex-column align-items-stretch">
+        <span class="block block-rounded block-bordered text-center d-flex flex-column">
+            <div class="block-header">
+                <img class="img-avatar img-avatar32 stream-avatar-thumb img-avatar-rounded" src="{{(streamer.thumbnail_url)}}" alt="">
+                <span class="block-title badge bg-black-25 fw-bold mx-2 py-1 px-3">
+                    {{streamer.user_login}}
+                    {% if streamer.type == 'live' %}
+                    <span class="stream-live">Live</span>
+                    {% endif %}
+                </span>
+            </div>
+           
+            {% if streamer.type == 'live' %}
+                {% if streamer.type_stream_name == 'twitch' %}
+                    <iframe class="stream-video" src="https://player.twitch.tv/?channel={{(streamer.user_login)}}&parent={{(domain)}}&autoplay=false" title="{{(streamer.title)}}" frameborder="0" scrolling="no" allowfullscreen></iframe>
+                {% elseif streamer.type_stream_name == 'youtube' %}
+                    <iframe class="stream-video" src="https://www.youtube.com/embed/{{(streamer.stream_current_id)}}" title="{{(streamer.title)}}" frameborder="0" alow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                {% elseif streamer.type_stream_name == 'trovo' %}
+                    <iframe class="stream-video" src="https://player.trovo.live/embed/player?streamername={{(streamer.user_login)}}&autoplay=false" title="{{(streamer.title)}}" frameborder="0" allowfullscreen></iframe>
+                {% endif %}
+            {% else %}
+            <div class="bg-body-light stream-not-found">
+                Игрок не стримит
+            </div>
+            {% endif %}
+
+            <div class="block-header">
+                <div>
+                    {% if streamer.type_stream_name == 'twitch' %}
+                    <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/twitch.png" height="20"/>
+                    {% elseif streamer.type_stream_name == 'youtube' %}
+                    <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/youtube.png" height="17"/>
+                    {% elseif streamer.type_stream_name == 'trovo' %}
+                    <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/trovo.png" height="17"/>
+                    {% endif %}
+                    {{streamer.viewers_count}}
+                </div>
+                {% if streamer.type == 'live' %}
+                <div>
+                    {{streamer.duration}}
+                </div>
+                {% endif %}
+            </div>
+        </span>
+    </div>
+    {% endfor %}
+</div>
+
+</div>
+
+{% endblock %}
