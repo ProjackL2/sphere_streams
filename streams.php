@@ -110,7 +110,7 @@ class streams {
                                                   $stream_data['viewer_count'],
                                                   $profile_image_url,
                                                   $stream_data['type'],
-                                                  $stream_duration_sec,
+                                                  $stream_duration_sec / 60,
                                                   $stream_duration_formatted);
             } else {
                 if ($show_offline) {
@@ -160,7 +160,7 @@ class streams {
                                                   $stream_live_data['concurrentViewers'],
                                                   $live_image_url,
                                                   'live',
-                                                  $stream_duration_sec,
+                                                  $stream_duration_sec / 60,
                                                   $stream_duration_formatted);
             } else {
                 if ($show_offline) {
@@ -205,7 +205,7 @@ class streams {
                                                   $stream_data['current_viewers'],
                                                   $profile_image_url,
                                                   'live',
-                                                  $stream_duration_sec,
+                                                  $stream_duration_sec / 60,
                                                   $stream_duration_formatted);
             } else {
                 if ($show_offline) {
