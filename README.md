@@ -4,7 +4,7 @@ Online streams plugin for SphereWeb CMS.
 
 # Instalation
 
-Add to `src/component/plugins` dir as `sphere_streams` folder.
+Add to `src/component/plugins` dir as `sphere_streams` folder. Plugin will be available by path `/streams/view`
 
 # How to use
 
