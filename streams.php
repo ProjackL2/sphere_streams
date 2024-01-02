@@ -17,8 +17,7 @@ class streams {
            redirect::location("/main");
         }
 
-        $data = streams::load_streams();
-        $streams_data = json_decode($data);
+        $streams_data = streams::load_streams();
         if (empty($streams_data)) {
             error::error404("Нет доступных стримов");
         }
@@ -31,7 +30,7 @@ class streams {
     public static function request_streams_list() {
         $settings = include __DIR__ . "/settings.php";
         if ($settings['PLUGIN_ENABLE']) {
-            echo streams::load_streams();
+            echo json_encode(streams::load_streams());
         }
     }
 
@@ -44,38 +43,65 @@ class streams {
 
     private static function update_streams_cache() {
         $config = include __DIR__ . "/config.php";
-        $cache_filename = $config['cache_file_name'];
-        $cache_duration = $config['cache_duration'];
 
         $now = time();
-        if (!file_exists($cache_filename) || $now - filemtime($cache_filename) >= $cache_duration) {
-            $show_offline = $config['streams']['show_offline'];
 
-            $twitch = $config['streams']['twitch'];
+        $streams_config = $config['streams'];
+        $show_offline = $streams_config['show_offline'];
+
+        $twitch = $streams_config['twitch'];
+        $twitch_cache_filename = $twitch['cache_file_name'];
+        $twitch_cache_duration = $twitch['cache_duration'];
+        if (!file_exists($twitch_cache_filename) || $now - filemtime($twitch_cache_filename) >= $twitch_cache_duration) {
             $twitch_info = streams::load_twitch_streams($twitch['streamers'], $twitch['client_id'], $twitch['access_token'], $now, $show_offline);
+            usort($twitch_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            file_put_contents($twitch_cache_filename, json_encode($twitch_info));
+        }
 
-            $youtube = $config['streams']['youtube'];
+        $youtube = $streams_config['youtube'];
+        $youtube_cache_filename = $youtube['cache_file_name'];
+        $youtube_cache_duration = $youtube['cache_duration'];
+        if (!file_exists($youtube_cache_filename) || $now - filemtime($youtube_cache_filename) >= $youtube_cache_duration) {
             $youtube_info = streams::load_youtube_streams($youtube['streamers'], $youtube['api_key'], $now, $show_offline);
+            usort($youtube_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            file_put_contents($youtube_cache_filename, json_encode($youtube_info));
+        }
 
-            $trovo = $config['streams']['trovo'];
+        $trovo = $streams_config['trovo'];
+        $trovo_cache_filename = $trovo['cache_file_name'];
+        $trovo_cache_duration = $trovo['cache_duration'];
+        if (!file_exists($trovo_cache_filename) || $now - filemtime($trovo_cache_filename) >= $trovo_cache_duration) {
             $trovo_info = streams::load_trovo_streams($trovo['streamers'], $trovo['client_id'], $now, $show_offline);
-    
-            $info = array_merge($twitch_info, $youtube_info, $trovo_info);
-            usort($info, function($a, $b) {
-                return $b['viewers_count'] - $a['viewers_count'];
-            });
-
-            file_put_contents($cache_filename, json_encode($info));
+            usort($trovo_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            file_put_contents($trovo_cache_filename, json_encode($trovo_info));
         }
     }
 
     public static function load_streams() {
         $config = include __DIR__ . "/config.php";
-        if (!file_exists($config['cache_file_name'])) {
+        $streams_config = $config['streams'];
+
+        $twitch = $streams_config['twitch'];
+        $twitch_cache_filename = $twitch['cache_file_name'];
+        $youtube = $streams_config['youtube'];
+        $youtube_cache_filename = $youtube['cache_file_name'];
+        $trovo = $streams_config['trovo'];
+        $trovo_cache_filename = $trovo['cache_file_name'];
+
+        if (!file_exists($twitch_cache_filename) || !file_exists($youtube_cache_filename) || !file_exists($trovo_cache_filename)) {
             streams::update_streams_cache();
         }
 
-        return file_get_contents($config['cache_file_name']);
+        $twitch_info = json_decode(file_get_contents($twitch_cache_filename), true);
+        $youtube_info = json_decode(file_get_contents($youtube_cache_filename), true);
+        $trovo_info = json_decode(file_get_contents($trovo_cache_filename), true);
+
+        $info = array_merge($twitch_info, $youtube_info, $trovo_info);
+        usort($info, function($a, $b) {
+            return $b['viewers_count'] - $a['viewers_count'];
+        });
+
+        return $info;
     }
 
     private static function load_twitch_streams($list, $client_id, $access_token, $now, $show_offline) {

@@ -25,8 +25,7 @@ class rewards {
         }
 
         // get info about current streams
-        $data = streams::load_streams();
-        $streams = json_decode($data, true);
+        $streams = streams::load_streams();
         
         $now = time();
 

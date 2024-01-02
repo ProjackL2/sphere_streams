@@ -1,9 +1,6 @@
 <?php
 
 return [
-    "cache_duration" => 60,
-    "cache_file_name" => "uploads/cache/streams.json",
-
     // streamers list and configurations
     "streams" => [
         // if enabled, offline streams will be listed
@@ -12,6 +9,9 @@ return [
         "twitch" => [
             "access_token" => "YOUR_ACCESS_TOKEN",
             "client_id" => "YOUR_CLIENT_ID",
+
+            "cache_file_name" => "uploads/cache/streams-twitch.json",
+            "cache_duration" => 60,
 
             "streamers" => [
                 [
@@ -47,6 +47,9 @@ return [
         "youtube" => [
             "api_key" => "YOUR_API_KEY",
 
+            "cache_file_name" => "uploads/cache/streams-youtube.json",
+            "cache_duration" => 60*20,
+
             "streamers" => [
                 [
                     "username" => "LofiGirl",
@@ -62,6 +65,9 @@ return [
         ],
         "trovo" => [
             "client_id" => "YOUR_CLIENT_ID",
+
+            "cache_file_name" => "uploads/cache/streams-trovo.json",
+            "cache_duration" => 60,
 
             "streamers" => [
                 [
