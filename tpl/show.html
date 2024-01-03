@@ -22,11 +22,11 @@
             </div>
            
             {% if streamer.type == 'live' %}
-                {% if streamer.type_stream_name == 'twitch' %}
+                {% if streamer.platform == 'twitch' %}
                     <iframe class="stream-video" src="https://player.twitch.tv/?channel={{(streamer.user_login)}}&parent={{(domain)}}&autoplay=false" title="{{(streamer.title)}}" frameborder="0" scrolling="no" allowfullscreen></iframe>
-                {% elseif streamer.type_stream_name == 'youtube' %}
-                    <iframe class="stream-video" src="https://www.youtube.com/embed/{{(streamer.stream_current_id)}}" title="{{(streamer.title)}}" frameborder="0" alow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                {% elseif streamer.type_stream_name == 'trovo' %}
+                {% elseif streamer.platform == 'youtube' %}
+                    <iframe class="stream-video" src="https://www.youtube.com/embed/{{(streamer.stream_id)}}" title="{{(streamer.title)}}" frameborder="0" alow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                {% elseif streamer.platform == 'trovo' %}
                     <iframe class="stream-video" src="https://player.trovo.live/embed/player?streamername={{(streamer.user_login)}}&autoplay=false" title="{{(streamer.title)}}" frameborder="0" allowfullscreen></iframe>
                 {% endif %}
             {% else %}
@@ -37,14 +37,14 @@
 
             <div class="block-header">
                 <div>
-                    {% if streamer.type_stream_name == 'twitch' %}
+                    {% if streamer.platform == 'twitch' %}
                     <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/twitch.png" height="20"/>
-                    {% elseif streamer.type_stream_name == 'youtube' %}
+                    {% elseif streamer.platform == 'youtube' %}
                     <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/youtube.png" height="17"/>
-                    {% elseif streamer.type_stream_name == 'trovo' %}
+                    {% elseif streamer.platform == 'trovo' %}
                     <img class="stream-status" src="/src/component/plugins/sphere_streams/tpl/img/trovo.png" height="17"/>
                     {% endif %}
-                    {{streamer.viewers_count}}
+                    {{streamer.viewers}}
                 </div>
                 {% if streamer.type == 'live' %}
                 <div>

@@ -54,7 +54,7 @@ class streams {
         $twitch_cache_duration = $twitch['cache_duration'];
         if (!file_exists($twitch_cache_filename) || $now - filemtime($twitch_cache_filename) >= $twitch_cache_duration) {
             $twitch_info = streams::load_twitch_streams($twitch['streamers'], $twitch['client_id'], $twitch['access_token'], $now, $show_offline);
-            usort($twitch_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            usort($twitch_info, function($a, $b) { return $b['viewers'] - $a['viewers']; });
             file_put_contents($twitch_cache_filename, json_encode($twitch_info));
         }
 
@@ -63,7 +63,7 @@ class streams {
         $youtube_cache_duration = $youtube['cache_duration'];
         if (!file_exists($youtube_cache_filename) || $now - filemtime($youtube_cache_filename) >= $youtube_cache_duration) {
             $youtube_info = streams::load_youtube_streams($youtube['streamers'], $youtube['api_key'], $now, $show_offline);
-            usort($youtube_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            usort($youtube_info, function($a, $b) { return $b['viewers'] - $a['viewers']; });
             file_put_contents($youtube_cache_filename, json_encode($youtube_info));
         }
 
@@ -72,7 +72,7 @@ class streams {
         $trovo_cache_duration = $trovo['cache_duration'];
         if (!file_exists($trovo_cache_filename) || $now - filemtime($trovo_cache_filename) >= $trovo_cache_duration) {
             $trovo_info = streams::load_trovo_streams($trovo['streamers'], $trovo['client_id'], $now, $show_offline);
-            usort($trovo_info, function($a, $b) { return $b['viewers_count'] - $a['viewers_count']; });
+            usort($trovo_info, function($a, $b) { return $b['viewers'] - $a['viewers']; });
             file_put_contents($trovo_cache_filename, json_encode($trovo_info));
         }
     }
@@ -98,7 +98,7 @@ class streams {
 
         $info = array_merge($twitch_info, $youtube_info, $trovo_info);
         usort($info, function($a, $b) {
-            return $b['viewers_count'] - $a['viewers_count'];
+            return $b['viewers'] - $a['viewers'];
         });
 
         return $info;
@@ -244,12 +244,12 @@ class streams {
 
     private static function make_live_info($platform, $stream_id, $sphere_user_id, $username, $title, $viewers_cout, $image_url, $type, $stream_duration_min, $formated_duration) {
         return [
-            'type_stream_name' => $platform,
-            'stream_current_id' => $stream_id,
+            'platform' => $platform,
+            'stream_id' => $stream_id,
             'sphere_user_id' => $sphere_user_id,
             'user_login' => $username,
             'title' => $title,
-            'viewers_count' => $viewers_cout,
+            'viewers' => $viewers_cout,
             'thumbnail_url' => $image_url,
             'type' => $type,
             'duration_min' => $stream_duration_min,
@@ -259,11 +259,11 @@ class streams {
 
     private static function make_offline_info($platform, $username, $login, $image_url) {
         return [
-            'type_stream_name' => $platform,
+            'platform' => $platform,
             'user_login' => $username,
             'sphere_user_id' => $login,
             'title' => $username,
-            'viewers_count' => 0,
+            'viewers' => 0,
             'thumbnail_url' => $image_url,
             'type' => 'offline',
             'duration_min' => 0,
