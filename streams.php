@@ -218,7 +218,7 @@ class streams {
             if ($is_live) {
                 $stream_data = $stream_response_data;
 
-                $stream_start = strtotime($stream_data['started_at']);
+                $stream_start = intval($stream_data['started_at']);
                 $stream_duration_sec = $now - $stream_start;
                 $stream_duration_formatted = gmdate("H:i:s", $stream_duration_sec);
 
