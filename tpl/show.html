@@ -1,8 +1,9 @@
-{% extends 'basic/base.html' %}
 
-{% block title %}Server Streams{% endblock %}
+{% set streamers_info = get_streams() %}
+{% set domain = get_domain() %}
 
-{% block content %}
+{% if streamers_info is not null %}
+
 <link rel="stylesheet" href="/src/component/plugins/sphere_streams/tpl/css/stream.css">
 
 <div class="content">
@@ -59,4 +60,4 @@
 
 </div>
 
-{% endblock %}
+{% endif %}

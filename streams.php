@@ -8,10 +8,7 @@ use Ofey\Logan22\model\admin\validation;
 use Ofey\Logan22\template\tpl;
 
 class streams {
-
     public static function show_streams_draw() {
-        validation::user_protection();
-
         $settings = include __DIR__ . "/settings.php";
         if (!$settings['PLUGIN_ENABLE']) {
            redirect::location("/main");
@@ -21,10 +18,8 @@ class streams {
         if (empty($streams_data)) {
             error::error404("Нет доступных стримов");
         }
-
-        tpl::addVar("streamers_info", $streams_data);
-        tpl::addVar("domain", $_SERVER['HTTP_HOST']);
-        tpl::displayPlugin("/sphere_streams/tpl/show.html");
+        
+        tpl::displayPlugin("/sphere_streams/tpl/index.html");
     }
 
     public static function request_streams_list() {

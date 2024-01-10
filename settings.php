@@ -16,4 +16,8 @@ return [
 "PLUGIN_USER_PAGE_ICON" => "fa fa-play",
 "PLUGIN_USER_PAGE_ACCESS" => ["user", "admin"],
 "PLUGIN_USER_PANEL_SHOW" => ["MAIN_MENU"],
+
+"INCLUDES" => [
+    "PLACE_IN_SPACE_MAIN_1" => "sphere_streams/tpl/show.html",
+],
 ];
