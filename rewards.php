@@ -37,7 +37,7 @@ class rewards {
             $user_id = $stream['sphere_user_id'];
             $stream_duration_min = $stream['duration_min'];
             $stream_duration_formated = $stream['duration'];
-            $viewers_count = $stream['viewers_count'];
+            $viewers_count = $stream['viewers'];
 
             $need_notify = false;
             foreach ($reward_records as $record) {

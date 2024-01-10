@@ -115,6 +115,10 @@ class streams {
             $user_response = streams::request($user_url, $auth_headers);
             $user_data = json_decode($user_response, true);
             
+            if (!isset($user_data['data'][0])) {
+                continue;
+            }
+
             $profile_image_url = $user_data['data'][0]['profile_image_url'];
 
             $stream_url = 'https://api.twitch.tv/helix/streams?user_login=' . $username;
