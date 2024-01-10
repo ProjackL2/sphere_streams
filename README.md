@@ -45,6 +45,7 @@ Configure `config.php` file.
 ```
 
 ## Trovo
+0. Request adding your web domain to white list: [rules](https://developer.trovo.live/docs/Embedded.html).
 1. Get client id for your [trovo app](https://developer.trovo.live/docs/APIs.html#_2-register-your-application).
 2. Setup credentials to config.php
 ```
